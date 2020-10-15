@@ -10,7 +10,6 @@ export default {
 
         return response.json(orphanages);
     },
-
     async show(request: Request, response: Response) {
         const { id } = request.params;
 
@@ -39,7 +38,7 @@ export default {
            const images = requestImages.map(image => {
                return { path: image.filename }
            })
-        
+
             const orphanage = orphanagesRepository.create({
                 name,
                 latitude,
