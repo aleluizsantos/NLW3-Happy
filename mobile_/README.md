@@ -5,7 +5,9 @@
 <p>Desenvolvido aplicação Mobile, na semana NLW#3 – Workshop da Rocketseat</p>
 <br />
 
-![mobile](https://user-images.githubusercontent.com/16269962/96376355-e44b5780-1154-11eb-8a8a-e648bd48058b.gif)
+<div align="center">
+    <img width="300" src="https://user-images.githubusercontent.com/16269962/96376355-e44b5780-1154-11eb-8a8a-e648bd48058b.gif" />
+</div>
 
 ## Tecnologias
 
