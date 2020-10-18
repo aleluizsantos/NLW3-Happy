@@ -4,7 +4,7 @@ import MapView, { Callout, Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import { Feather } from '@expo/vector-icons';
 
 import mapMarker from '../images/map-marker.png';
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import api from "../services/api";
 
 interface Orphanage {
@@ -18,11 +18,11 @@ export default function OrphanagesMap() {
     const navigation = useNavigation();
     const [orphanages, setOrphanages] = useState<Orphanage[]>([]);
 
-    useEffect(()=> {
+    useFocusEffect(()=> {
       api.get('orphanages').then(response => {
         setOrphanages(response.data);
       })
-    },[]);
+    });
 
     function handlerNavigationToDetails(id: number) {
       navigation.navigate('OrphanagesDetails', { id });
@@ -40,8 +40,8 @@ export default function OrphanagesMap() {
                 initialRegion={{
                 latitude: -20.2845958,
                 longitude: -50.5446169,
-                latitudeDelta: 0.008,
-                longitudeDelta: 0.008
+                latitudeDelta: 0.02,
+                longitudeDelta: 0.05
                 }}
             >
               {orphanages.map(orphanage => {
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
       paddingLeft: 24,
   
       flexDirection: 'row',
-      justifyContent: 'space-around',
+      justifyContent: 'space-between',
       alignItems: 'center',
   
       elevation: 3
