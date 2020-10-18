@@ -1,15 +1,14 @@
 import React, { useState, FormEvent, ChangeEvent } from "react";
 import { Map, Marker, TileLayer } from 'react-leaflet';
 import { LeafletMouseEvent } from 'leaflet';
+import { useHistory } from "react-router-dom";
 import { FiPlus } from "react-icons/fi";
 
-import Sidebar from "../components/Sidebar";
-
 import '../styles/pages/create-orphanage.css';
+
+import Sidebar from "../components/Sidebar";
 import mapIcon from "../utils/mapIcon";
 import api from "../services/api";
-import { useHistory } from "react-router-dom";
-
 
 export default function CreateOrphanage() {
   const history = useHistory();
@@ -23,6 +22,8 @@ export default function CreateOrphanage() {
   const [images, setImages] = useState<File[]>([]);
   const [previewImage, setPreviewImage] = useState<string[]>([]);
 
+  // Selecionar um ponto no map
+  // --------------------------------------------------------------------
   function handlerMapClick(event: LeafletMouseEvent) {
     const {lat, lng} = event.latlng;
     setPosition({
@@ -30,27 +31,38 @@ export default function CreateOrphanage() {
       longitude: lng,
     })
   }
-
+  // Deletar imagem selecionadas
+  // --------------------------------------------------------------------
+  function handleDeleteImage(idx: number) {
+    // Excluir do ImagePreview o index informado
+    const filteredImagePreview = previewImage.filter((img,index) => index !== idx ); 
+    setPreviewImage(filteredImagePreview);
+    // Excluir do Images o index informado
+    const filteredImages = images.filter((img,index) => index !== idx ); 
+    setImages(filteredImages);
+  }
+  // Abrir janela para selecionar imagens
+  // --------------------------------------------------------------------
   function handlerSelectImage(event: ChangeEvent<HTMLInputElement>) {
-    if(!event.target.files) { 
-      return;
-    }
-    
+    // Se não selecionar nenhum imagem
+    if(!event.target.files) { return; }
+    // Transforma as imagens selecinadas em uma array de images
     const selectImages = Array.from(event.target.files)
     setImages(selectImages);
-
+    // Criar um objeto de url para exibir um preview das imagens selecionadas
     const selectImagePreview = selectImages.map(image => {
       return URL.createObjectURL(image);
     });
-
+    // Armazena no state um array de string de imagens
     setPreviewImage(selectImagePreview);
-
   }
-
+  // Gravando os dados fornecidos no formulário
+  // --------------------------------------------------------------------
   async function handlerSubmit(event: FormEvent ) {
     event.preventDefault();
 
-    const data = new FormData();
+    try {
+      const data = new FormData();
       data.append('name', name);
       data.append('latitude', String(position.latitude));
       data.append('longitude', String(position.longitude));
@@ -67,6 +79,9 @@ export default function CreateOrphanage() {
 
       alert("Cadastro realizado com sucesso!");
       history.push('/app');
+    } catch (error) {
+      alert('Erro falta de dados');
+    }
   }
   
   return (
@@ -125,14 +140,26 @@ export default function CreateOrphanage() {
               <label htmlFor="images">Fotos</label>
 
               <div className="images-container">
-                {previewImage.map(image => {
-                  return <img key={image} src={image} alt={name} />
+                {/* fazer um Preview das imagens */}
+                {previewImage.map((image, idx) => {
+                  return (
+                    <div key={image} className='content-image'>
+                      <img src={image} alt={name} />
+                      <button 
+                        onClick={()=> handleDeleteImage(idx)}
+                        className="delete-img" 
+                        type="button">
+                        X
+                      </button>
+                    </div>
+                  )
                 })}
+
                 <label htmlFor='image[]' className="new-image">
                   <FiPlus size={24} color="#15b6d6" />
                 </label>
               </div>
-
+              
               <input multiple onChange={handlerSelectImage} type="file" id="image[]" />
             </div>
 

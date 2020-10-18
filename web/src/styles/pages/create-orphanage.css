@@ -91,13 +91,34 @@ form.create-orphanage-form .input-block .images-container {
   grid-template-columns: repeat(5, 1fr);
   grid-gap: 16px;
 }
+
+form.create-orphanage-form .input-block .images-container .content-image {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+}
+form.create-orphanage-form
+  .input-block
+  .images-container
+  .content-image
+  button {
+  border: none;
+  padding: 5px 8px;
+  background-color: rgba(250, 128, 114, 0.6);
+  color: white;
+  border-radius: 0px 0px 0px 20px;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
 form.create-orphanage-form .input-block .images-container img {
   width: 100%;
   height: 96px;
   border-radius: 15px;
   object-fit: cover;
 }
-form.create-orphanage-form .input-block input[type=file] {
+form.create-orphanage-form .input-block input[type="file"] {
   display: none;
 }
 form.create-orphanage-form .input-block .images-container .new-image {
